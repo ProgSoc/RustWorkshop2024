@@ -1,5 +1,4 @@
-// Demonstrate `cargo add`.
-use input_macro::input;
+use std::io::{stdin, stdout, Write};
 
 // Demonstrate other imports from std.
 use std::time::Instant;
@@ -108,6 +107,14 @@ fn next_position<const X: usize, const Y: usize>(
     */
 }
 
+fn input(prompt: &str) -> String {
+    print!("{prompt}");
+    let _ = stdout().flush();
+    let mut buffer = String::new();
+    _ = stdin().read_line(&mut buffer);
+    buffer.trim().to_string()
+}
+
 fn main() {
 
     // Compile-time constants: (equivalent to constexpr in >=C++11)
@@ -133,7 +140,7 @@ fn main() {
     loop {
 
         let start_time = Instant::now();
-        let string_direction = input!("Which direction would you like to move? ").to_lowercase();
+        let string_direction = input("Which direction would you like to move? ").to_lowercase();
         let choice_time = start_time.elapsed().as_millis();
 
         // Static method calling.
@@ -185,10 +192,17 @@ fn main() {
         }
     }
 
-    println!("You have {points} points.");
+    if points == 1 {
+        println!("You have 1 point.");
+    } else {
+        println!("You have {points} points.");
+    }
+
     println!("Your game history was:");
+
     for choice in &game_history {
         println!("Took {1} ms to move {0:?}.", choice.movement, choice.time_taken);
     }
+
     game_history.push(Choice { movement: Direction::Left, time_taken: 0 });
 }
