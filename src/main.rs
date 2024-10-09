@@ -3,8 +3,8 @@ use std::io::{stdin, stdout, Write};
 // Demonstrate other imports from std.
 use std::time::Instant;
 
-// Typedef.
-type Position = (usize, usize);
+#[derive(Clone, Copy)]
+struct Position(usize, usize);
 
 // Demonstrating Rust enums, with all three styles of variants.
 #[derive(Clone, Copy)]
@@ -42,10 +42,10 @@ impl std::ops::Add<Direction> for Position {
     type Output = Self;
     fn add(self, d: Direction) -> Position {
         match d {
-            Direction::Left => (self.0 - 1, self.1),
-            Direction::Right => (self.0 + 1, self.1),
-            Direction::Up => (self.0, self.1 + 1),
-            Direction::Down => (self.0, self.1 - 1),
+            Direction::Left => Position(self.0 - 1, self.1),
+            Direction::Right => Position(self.0 + 1, self.1),
+            Direction::Up => Position(self.0, self.1 + 1),
+            Direction::Down => Position(self.0, self.1 - 1),
         }
     }
 }
@@ -130,7 +130,7 @@ fn main() {
     ];
 
     // Mutable variables. Mutation is opt-in, and is more or less independent of variable type.
-    let mut position: Position = (0, 0);
+    let mut position: Position = Position(0, 0);
 
     let mut points: i32 = 0;
 
@@ -158,11 +158,11 @@ fn main() {
 
         // Calling with generic parameters.
         match next_position::<GRID_X_LIMIT, GRID_Y_LIMIT>(position, direction.unwrap()) {
-            Ok((new_x, new_y)) => {
+            Ok(Position(new_x, new_y)) => {
                 match map[new_y][new_x] {
                     Tile::Empty => {
                         println!("Moved successfully to ({new_x}, {new_y}).");
-                        position = (new_x, new_y);
+                        position = Position(new_x, new_y);
                     }
                     Tile::Wall => {
                         println!("Cannot walk into a wall at ({new_x}, {new_y}).");
@@ -171,7 +171,7 @@ fn main() {
                     Tile::Trap(penalty, taunt_message) => {
                         println!("Trap!! {taunt_message}");
                         println!("Deducted {penalty} points.");
-                        position = (new_x, new_y);
+                        position = Position(new_x, new_y);
                         points -= penalty;
                     }
                     Tile::Goal(reward) => {
@@ -182,7 +182,7 @@ fn main() {
                     }
                     Tile::Teleport { x, y } => {
                         println!("Teleported from ({new_x}, {new_y}) to ({x}, {y}).");
-                        position = (x, y);
+                        position = Position(x, y);
                     }
                 }
             }
