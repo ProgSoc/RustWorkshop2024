@@ -51,7 +51,9 @@ fn main() {
                 y -= 1;
             }
             // Remember, `match` statements have to cover all possibilities.
-            _ => {}
+            _ => {
+                println!("Invalid input.");
+            }
         }
     }
 

@@ -14,6 +14,12 @@ struct Position {
 // Impl block. Method definitions are separated from data in Rust.
 impl Position {
 
+    // This is how Rust expresses static methods: not having a `self` argument to start.
+    // Note that `Self` is the class of the object (i.e., `Position` here).
+    fn new_position() -> Self {
+        Self { x: 0, y : 0 }
+    }
+
     // For methods like getters, you won't need to mutate the state of the object.
     fn get_x(&self) -> i32 {
         self.x
@@ -44,7 +50,7 @@ fn input(prompt: &str) -> String {
 fn main() {
 
     // Rather than using the separate `x` and `y`, we have the one `pos` variable.
-    let mut pos = Position { x: 0, y: 0 };
+    let mut pos = Position::new_position();
 
     println!("Start position: ({}, {})", pos.get_x(), pos.get_y());
 
@@ -69,7 +75,9 @@ fn main() {
                 println!("Moved down");
                 pos.set_y(pos.get_y() - 1);
             }
-            _ => {}
+            _ => {
+                println!("Invalid input.");
+            }
         }
     }
 
