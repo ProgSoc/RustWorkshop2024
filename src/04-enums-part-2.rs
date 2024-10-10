@@ -32,7 +32,7 @@ impl Action {
                 let direction = Direction::from_string(action).unwrap();
                 Some(Self::Movement(direction))
             }
-            a if action.starts_with("deposit") => {
+            _ if action.starts_with("deposit") => {
                 let sequence: Vec<&str> = action.split_whitespace().collect();
                 if sequence.len() == 2 {
                     if let Ok(int_value) = sequence[1].parse::<u64>() {
@@ -68,13 +68,8 @@ impl Position {
         self.y
     }
 
-    fn set_x(&mut self, new_x: i32) {
-        self.x = new_x;
-    }
-
-    fn set_y(&mut self, new_y: i32) {
-        self.y = new_y;
-    }
+    // We remove `set_x` and `set_y` since we no longer use them,
+    // and we are reminded to do this by the compiler.
 
     // Let's add some more functionality to the `Position` struct as well,
     // and let it interact with the `Direction` enum.
@@ -114,7 +109,7 @@ fn main() {
                 }
                 Action::Movement(d) => {
                     println!("Moved.");
-                    pos = pos.make_movement(d);
+                    pos = pos.make_movement(&d);
                 }
                 Action::Deposit(value) => {
                     println!("Deposited {value}.");
