@@ -42,9 +42,8 @@ impl Position {
 
 fn input(prompt: &str) -> String {
     print!("{prompt}");
-    let mut buffer = String::new();
-    _ = std::io::stdin().read_line(&mut buffer);
-    buffer.trim().to_string()
+    let _ = std::io::stdout().flush();
+    std::io::stdin().lines().next().unwrap().unwrap()
 }
 
 fn main() {

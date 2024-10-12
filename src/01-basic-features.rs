@@ -1,22 +1,32 @@
+use std::io::Write;
+
 // Here we have a function, and notice how it takes a reference to a string.
 // It will read the input value, but never really consume or move it.
 
 // Notice also that the return type is the owned `String` type,
 // since we're creating a new value within the function and returning it.
 fn input(prompt: &str) -> String {
+
     // We use the `prompt` value here.
     print!("{prompt}");
 
-    // The way reading from CLI works in Rust is by first preparing a String variable
-    // to act as the buffer for the inputted string.
-    let mut buffer = String::new();
+    // We're going to have to hand-wave this part away,
+    // but this just flushes the buffer so that the prompt prints,
+    // and then reads a single line from the user input.
+    let _ = std::io::stdout().flush();
+    std::io::stdin().lines().next().unwrap().unwrap()
 
-    // `std` is the Rust standard library.
-    // The `read_line` function reads from CLI and puts the string into the given buffer.
-    _ = std::io::stdin().read_line(&mut buffer);
+    // Also note that we returned using an implicit return.
+}
 
-    // We do the funky little "implicit return" here.
-    buffer.trim().to_string()
+fn direction_index(dir: &str) -> i32 {
+    match dir {
+        "left" => 0,
+        "right" => 1,
+        "up" => 2,
+        "down" => 3,
+        _ => 4,
+    }
 }
 
 fn main() {
@@ -33,20 +43,20 @@ fn main() {
         let direction = input("Input direction to move: ").to_lowercase();
 
         // We show that `match` statements will match values (not just structure).
-        match &direction as &str {
-            "left" => {
+        match direction_index(&direction) {
+            0 => {
                 println!("Moved left");
                 x -= 1;
             }
-            "right" => {
+            1 => {
                 println!("Moved right");
                 x += 1;
             }
-            "up" => {
+            2 => {
                 println!("Moved up");
                 y += 1;
             }
-            "down" => {
+            3 => {
                 println!("Moved down");
                 y -= 1;
             }
