@@ -45,19 +45,19 @@ fn main() {
         // We show that `match` statements will match values (not just structure).
         match direction_index(&direction) {
             0 => {
-                println!("Moved left");
+                println!("Moved left.");
                 x -= 1;
             }
             1 => {
-                println!("Moved right");
+                println!("Moved right.");
                 x += 1;
             }
             2 => {
-                println!("Moved up");
+                println!("Moved up.");
                 y += 1;
             }
             3 => {
-                println!("Moved down");
+                println!("Moved down.");
                 y -= 1;
             }
             // Remember, `match` statements have to cover all possibilities.

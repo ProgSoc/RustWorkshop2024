@@ -1,3 +1,5 @@
+use std::io::Write;
+
 enum Direction {
     Left, Right, Up, Down
 }
@@ -74,10 +76,10 @@ fn main() {
         if let Some(direction) = maybe_direction {
             pos = pos.make_movement(&direction);
             match direction {
-                Direction::Left => println!("Moved left"),
-                Direction::Right => println!("Moved right"),
-                Direction::Up => println!("Moved up"),
-                Direction::Down => println!("Moved down"),
+                Direction::Left => println!("Moved left."),
+                Direction::Right => println!("Moved right."),
+                Direction::Up => println!("Moved up."),
+                Direction::Down => println!("Moved down."),
             }
         } else {
             println!("Invalid input.");

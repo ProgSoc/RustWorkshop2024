@@ -1,3 +1,5 @@
+use std::io::Write;
+
 // Structs can be defined in a variety of formats.
 
 // Tuple struct: similar to regular structs, but the fields have no names.
@@ -59,19 +61,19 @@ fn main() {
         // We use the getter and setter methods that we implemented above.
         match &direction as &str {
             "left" => {
-                println!("Moved left");
+                println!("Moved left.");
                 pos.set_x(pos.get_x() - 1);
             }
             "right" => {
-                println!("Moved right");
+                println!("Moved right.");
                 pos.set_x(pos.get_x() + 1);
             }
             "up" => {
-                println!("Moved up");
+                println!("Moved up.");
                 pos.set_y(pos.get_y() + 1);
             }
             "down" => {
-                println!("Moved down");
+                println!("Moved down.");
                 pos.set_y(pos.get_y() - 1);
             }
             _ => {

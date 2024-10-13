@@ -1,3 +1,5 @@
+use std::io::Write;
+
 enum Direction {
     Left, Right, Up, Down
 }
@@ -25,26 +27,26 @@ enum Action {
 // Demonstrating the power of other enums, and more importantly
 // the many ways you can use implicit returns and match statements.
 impl Action {
-    fn from_string(action: &str) -> Option<Self> {
+    fn from_string(action: &str) -> Result<Self, String> {
         match action {
-            "splash" => Some(Self::Splash),
+            "splash" => Ok(Self::Splash),
             "left" | "right" | "up" | "down" => {
                 let direction = Direction::from_string(action).unwrap();
-                Some(Self::Movement(direction))
+                Ok(Self::Movement(direction))
             }
             _ if action.starts_with("deposit") => {
                 let sequence: Vec<&str> = action.split_whitespace().collect();
                 if sequence.len() == 2 {
                     if let Ok(int_value) = sequence[1].parse::<u64>() {
-                        Some(Self::Deposit(int_value))
+                        Ok(Self::Deposit(int_value))
                     } else {
-                        None
+                        Err("Invalid integer.".to_string())
                     }
                 } else {
-                    None
+                    Err("'deposit' must be followed by a single integer.".to_string())
                 }
             }
-            _ => None,
+            _ => Err("Invalid action.".to_string()),
         }
     }
 }
@@ -101,22 +103,30 @@ fn main() {
 
         let maybe_action = Action::from_string(&direction_string as &str);
 
-        if let Some(action) = maybe_action {
-            match action {
-                Action::Splash => {
-                    println!("Splash");
-                }
-                Action::Movement(d) => {
-                    println!("Moved.");
-                    pos = pos.make_movement(&d);
-                }
-                Action::Deposit(value) => {
-                    println!("Deposited {value}.");
-                    money += value;
+        match maybe_action {
+            Ok(action) => {
+                match action {
+                    Action::Splash => {
+                        println!("Splash.");
+                    }
+                    Action::Movement(d) => {
+                        match d {
+                            Direction::Left => println!("Moved left."),
+                            Direction::Right => println!("Moved right."),
+                            Direction::Up => println!("Moved up."),
+                            Direction::Down => println!("Moved down."),
+                        }
+                        pos = pos.make_movement(&d);
+                    }
+                    Action::Deposit(value) => {
+                        println!("Deposited {value}.");
+                        money += value;
+                    }
                 }
             }
-        } else {
-            println!("Invalid input.");
+            Err(error_msg) => {
+                println!("{error_msg}");
+            }
         }
     }
 
