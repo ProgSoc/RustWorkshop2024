@@ -1,3 +1,4 @@
+// TODO: Remove this warning suppressor when you start working on Part 2.
 #![allow(unused)]
 
 use std::io::Write;
@@ -7,6 +8,8 @@ use std::io::Write;
 // * A static method `new_position`, that returns the origin `Position`.
 // * Instance methods `get_x` and `get_y`, which return the current x and y values.
 // * Instance methods `set_X` and `set_y`, which let you modify the x and y values.
+
+// TODO: Implement the `Position` struct: both the struct itself and its methods.
 
 fn input(prompt: &str) -> String {
     print!("{prompt}");
@@ -27,7 +30,11 @@ fn direction_index(dir: &str) -> i32 {
 pub fn main() {
     // Instead of using `x` and `y`, we can make a `Position` struct.
 
-    println!("Start position: ", /* What do I put here? */);
+    // TODO: Declare a mutable variable that is of type `Position`.
+
+
+    // TODO: Uncomment the line below and fill it in with the correct values.
+    // println!("Start position: ({}, {})", /* FILL IN */);
 
     for _ in 0..6 {
         let direction = input("Input direction to move: ").to_lowercase();
@@ -35,19 +42,19 @@ pub fn main() {
         match direction_index(&direction) {
             0 => {
                 println!("Moved left.");
-                // How do we do the equivalent of `x -= 1;`?
+                // TODO: Implement the equivalent of `x -= 1;`.
             }
             1 => {
                 println!("Moved right.");
-                // How do we do the equivalent of `x += 1;`?
+                // TODO: Implement the equivalent of `x += 1;`.
             }
             2 => {
                 println!("Moved up.");
-                // How do we do the equivalent of `y += 1;`?
+                // TODO: Implement the equivalent of `y += 1;`.
             }
             3 => {
                 println!("Moved down.");
-                // How do we do the equivalent of `y -= 1;`?
+                // TODO: Implement the equivalent of `y -= 1;`.
             }
             _ => {
                 println!("Invalid input.");
@@ -55,5 +62,5 @@ pub fn main() {
         }
     }
 
-    // Now let's output the end position as well.
+    // TODO: Use the `println!` macro here to print the end position.
 }

@@ -1,3 +1,4 @@
+// TODO: Remove this warning suppressor when you start working on Part 3.
 #![allow(unused)]
 
 use std::io::Write;
@@ -14,6 +15,8 @@ enum Direction {
 // that takes a string (`&str` in this case)
 // and converts that string value into the corresponding direction.
 // If an invalid direction is passed, we won't give back a valid value.
+
+// TODO: Use an `impl` block to implement `from_string` for the `Direction` enum.
 
 struct Position {
     x: i32,
@@ -52,6 +55,8 @@ impl Position {
 
     // For example, if we pass `&Direction::Left` to `Position { x: 3, y: 4 }`,
     // we want to be given a new object `Position { x: 2, y: 4 }`.
+
+    // TODO: Implement `make_movement` for the `Position` struct.
 }
 
 fn input(prompt: &str) -> String {
@@ -72,7 +77,8 @@ pub fn main() {
         // Notice how we are able to represent directions
         // directly as enums now, so we don't need the `direction_index`
         // method anymore. Let's refactor this part of the code to reflect this.
-        
+
+        // TODO: Use a `match` statement here to code the main running logic.
     }
 
     println!("End position: ({}, {})", pos.get_x(), pos.get_y());

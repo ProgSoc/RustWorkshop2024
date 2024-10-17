@@ -1,11 +1,17 @@
+// TODO: Remove this warning suppressor when you start working on Part 5.
 #![allow(unused)]
 
 // Import traits from the standard library (std),
 // which we can implement for types that we define in our program.
 // We'll need to add more to this statement.
+
+// TODO: Add some more traits to this `use` statement for use in the program.
 use std::io::Write;
 
 // Is there a way to make `Direction` easier to work with?
+
+// TODO: Use a macro here so that `Direction`
+//       no longer gets moved out of variables all the time.
 enum Direction {
     Left,
     Right,
@@ -29,6 +35,8 @@ impl Direction {
 // so that we can put these objects directly into a `println!` macro.
 
 // Is there a way to make `Action` easier to work with?
+
+// TODO: Do to the `Action` enum what you did to the `Direction` enum.
 enum Action {
     Splash,
     Movement(Direction),
@@ -63,6 +71,8 @@ impl Action {
 // Let's also implement `fmt::Display` for `Action`,
 // and we can rely on the definition for `fmt::Display` for `Direction` as well.
 
+// TODO: Implement `fmt::Display` for `Action`.
+
 struct Position {
     x: i32,
     y: i32,
@@ -74,20 +84,21 @@ impl Position {
     }
 }
 
-impl Default for Position {
-    fn default() -> Self {
-        Self::new_position()
-    }
-    // When we just print it out via the `Display` trait,
-    // we won't need to implement getters for `Position` in this program.
-    // We just remove them to make the compiler a little happier.
-}
+// TODO: Implement the `Default` trait for `Position`.
 
-// Implement the `fmt::Display` trait for `Position`.
+
+// When we just print a `Position` out via the `Display` trait,
+// we won't need to implement getters for `Position` in this program.
+// We just remove them here to make the compiler a little happier.
+
+// TODO: Implement the `fmt::Display` trait for `Position`.
+
 
 // Let's also make it possible to do something like
 // `Position` + `Direction`. What trait would we implement
 // to enable this functionality?
+
+// TODO: Implement a trait that allows adding a `Direction` to a `Position`.
 
 fn input(prompt: &str) -> String {
     print!("{prompt}");
@@ -98,10 +109,12 @@ fn input(prompt: &str) -> String {
 pub fn main() {
 
     let mut money = 0;
-    
-    let mut pos = Position::new_position();
 
-    // Relies on the `Display` trait being implemented for `Position`.
+    // TODO: Uncomment the below once you have implemented `Default` for `Position`.
+    // let mut pos: Position = Default::default();
+
+    // TODO: Uncomment the below once you have
+    //       implemented `fmt::Display` for `Position`.
     // println!("Start position: {}", pos);
 
     for _ in 0..6 {
@@ -113,12 +126,18 @@ pub fn main() {
                 // outside the `match` statement.
                 // Though of course, this relies on the `fmt::Display` trait
                 // being implemented for `Action`.
+
+                // TODO: Uncomment the below once you have
+                //       implemented `fmt::Display` for `Action`.
                 // println!("You {action}.");
 
                 match action {
                     Action::Splash => {}
                     Action::Movement(d) => {
                         // This will need some trait to overload the operator.
+
+                        // TODO: Uncomment the below when you have implemented
+                        //       the appropriate trait (hint: it's impl'd for `Position`).
                         // pos = pos + d;
                     }
                     Action::Deposit(value) => {
@@ -134,6 +153,10 @@ pub fn main() {
 
     // Implementing the `Display` trait also gives you
     // access to the `to_string` method.
+
+    // TODO: Uncomment the below once you have
+    //       implemented `fmt::Display` for `Position`.
     // println!("End position: {}", pos.to_string());
+
     println!("Final money: ${money}");
 }

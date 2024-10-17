@@ -1,5 +1,12 @@
 use std::io::Write;
 
+// We're kind of hand-waving this part away for the entire workshop,
+// but the jist of it is this:
+// We print out a prompt without a newline character,
+// and then flush the standard output so that the prompt appears on-screen.
+// Then we read one line from the console, assuming absolutely nothing goes wrong.
+// Having `.unwrap().unwrap()` just lying there doesn't sit well at all,
+// but this is really all for the sake of convenience.
 fn input(prompt: &str) -> String {
     print!("{prompt}");
     let _ = std::io::stdout().flush();
