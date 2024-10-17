@@ -1,22 +1,9 @@
 use std::io::Write;
 
-// Here we have a function, and notice how it takes a reference to a string.
-// It will read the input value, but never really consume or move it.
-
-// Notice also that the return type is the owned `String` type,
-// since we're creating a new value within the function and returning it.
 fn input(prompt: &str) -> String {
-
-    // We use the `prompt` value here.
     print!("{prompt}");
-
-    // We're going to have to hand-wave this part away,
-    // but this just flushes the buffer so that the prompt prints,
-    // and then reads a single line from the user input.
     let _ = std::io::stdout().flush();
     std::io::stdin().lines().next().unwrap().unwrap()
-
-    // Also note that we returned using an implicit return.
 }
 
 fn direction_index(dir: &str) -> i32 {
@@ -29,20 +16,28 @@ fn direction_index(dir: &str) -> i32 {
     }
 }
 
-fn main() {
+pub fn main() {
 
-    // The x-coordinate and y-coordinate will change within the program.
+    // Since we'll be mutating our position,
+    // which is expressed in terms of `x` and `y`,
+    // we need to mark these variables as mutable.
     let mut x = 0;
     let mut y = 0;
 
-    // Show where we are to start.
+    // The `println!` macro takes a format string,
+    // and automatically binds the values of variables
+    // when the variable names are found inside curly brackets.
     println!("Start position: ({x}, {y})");
 
     for _ in 0..6 {
-
         let direction = input("Input direction to move: ").to_lowercase();
 
-        // We show that `match` statements will match values (not just structure).
+        // We're hard coding integers for now,
+        // since we know exactly how `direction_index` works.
+        // As you'll see later in the workshop,
+        // there are better ways to go about this,
+        // but to demonstrate `match` statements for now,
+        // this is still useful.
         match direction_index(&direction) {
             0 => {
                 println!("Moved left.");
@@ -60,7 +55,8 @@ fn main() {
                 println!("Moved down.");
                 y -= 1;
             }
-            // Remember, `match` statements have to cover all possibilities.
+            // Of course, we need to make sure we cover
+            // every possibility in a match statement.
             _ => {
                 println!("Invalid input.");
             }

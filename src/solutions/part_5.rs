@@ -7,8 +7,12 @@ use std::{
     ops::Add,
 };
 
+#[derive(Clone, Copy)]
 enum Direction {
-    Left, Right, Up, Down
+    Left,
+    Right,
+    Up,
+    Down,
 }
 
 impl Direction {
@@ -36,6 +40,7 @@ impl fmt::Display for Direction {
     }
 }
 
+#[derive(Clone, Copy)]
 enum Action {
     Splash,
     Movement(Direction),
@@ -73,7 +78,7 @@ impl fmt::Display for Action {
             &Self::Splash => write!(f, "splashed"),
             // Relies on `Display` being implemented for `Direction`.
             &Self::Movement(ref d) => write!(f, "moved {d}"),
-            &Self::Deposit(ref m) => write!(f, "deposited {m} credits"),
+            &Self::Deposit(ref m) => write!(f, "deposited ${m}"),
         }
     }
 }
@@ -87,14 +92,14 @@ impl Position {
     fn new_position() -> Self {
         Self { x: 0, y : 0 }
     }
+    // We remove `get_x` and `get_y` since we no longer use them,
+    // and we are reminded to do this by the compiler.
 }
 
 impl Default for Position {
     fn default() -> Self {
         Self::new_position()
     }
-    // We remove `get_x` and `get_y` since we no longer use them,
-    // and we are reminded to do this by the compiler.
 }
 
 // This is a very typical implemention of the `Display` trait.
@@ -106,6 +111,8 @@ impl fmt::Display for Position {
     }
 }
 
+// We can add a `Direction` to a `Position` to represent
+// the incremental change to the position via a movement in a direction.
 impl Add<Direction> for Position {
     type Output = Self;
     fn add(self, d: Direction) -> Position {
@@ -124,10 +131,11 @@ fn input(prompt: &str) -> String {
     std::io::stdin().lines().next().unwrap().unwrap()
 }
 
-fn main() {
+pub fn main() {
 
     let mut money = 0;
-    let mut pos = Position::new_position();
+
+    let mut pos: Position = Default::default();
 
     // Relies on the `Display` trait being implemented for `Position`.
     println!("Start position: {}", pos);
@@ -135,12 +143,8 @@ fn main() {
     for _ in 0..6 {
         let direction_string = input("Input action: ").to_lowercase();
 
-        let maybe_action = Action::from_string(&direction_string as &str);
-
-        match maybe_action {
+        match Action::from_string(&direction_string) {
             Ok(action) => {
-                println!("You {action}.");
-
                 match action {
                     Action::Splash => {}
                     Action::Movement(d) => {
@@ -150,6 +154,11 @@ fn main() {
                         money += value;
                     }
                 }
+
+                // Notice we can use the variable here
+                // since the `match` statement copies the `Action` object.
+                // This is possible only when the `Copy` trait is derived.
+                println!("You {action}.");
             }
             Err(error_msg) => {
                 println!("{error_msg}");
@@ -157,7 +166,8 @@ fn main() {
         }
     }
 
-    // Implementing the `Display` trait also gives you access to the `to_string` method.
+    // Implementing the `Display` trait also
+    // gives you access to the `to_string` method.
     println!("End position: {}", pos.to_string());
     println!("Final money: ${money}");
 }

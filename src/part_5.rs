@@ -1,10 +1,18 @@
+#![allow(unused)]
+
+// Import traits from the standard library (std),
+// which we can implement for types that we define in our program.
+// We'll need to add more to this statement.
 use std::io::Write;
 
+// Is there a way to make `Direction` easier to work with?
 enum Direction {
-    Left, Right, Up, Down
+    Left,
+    Right,
+    Up,
+    Down,
 }
 
-// Impl blocks work for enums as well.
 impl Direction {
     fn from_string(direction: &str) -> Option<Self> {
         match direction {
@@ -17,15 +25,16 @@ impl Direction {
     }
 }
 
-// Here, we have an enum that can contain data depending on the variant.
+// Let's implement the `fmt::Display` trait for `Direction`
+// so that we can put these objects directly into a `println!` macro.
+
+// Is there a way to make `Action` easier to work with?
 enum Action {
     Splash,
     Movement(Direction),
     Deposit(u64),
 }
 
-// Demonstrating the power of other enums, and more importantly
-// the many ways you can use implicit returns and match statements.
 impl Action {
     fn from_string(action: &str) -> Result<Self, String> {
         match action {
@@ -51,39 +60,34 @@ impl Action {
     }
 }
 
+// Let's also implement `fmt::Display` for `Action`,
+// and we can rely on the definition for `fmt::Display` for `Direction` as well.
+
 struct Position {
     x: i32,
     y: i32,
 }
 
 impl Position {
-
     fn new_position() -> Self {
-        Self { x: 0, y : 0 }
-    }
-
-    fn get_x(&self) -> i32 {
-        self.x
-    }
-
-    fn get_y(&self) -> i32 {
-        self.y
-    }
-
-    // We remove `set_x` and `set_y` since we no longer use them,
-    // and we are reminded to do this by the compiler.
-
-    // Let's add some more functionality to the `Position` struct as well,
-    // and let it interact with the `Direction` enum.
-    fn make_movement(&self, dir: &Direction) -> Self {
-        match dir {
-            &Direction::Left => Position { x: self.x - 1, y: self.y },
-            &Direction::Right => Position { x: self.x + 1, y: self.y },
-            &Direction::Up => Position { x: self.x, y: self.y + 1 },
-            &Direction::Down => Position { x: self.x, y: self.y - 1 },
-        }
+        Self { x: 0, y: 0 }
     }
 }
+
+impl Default for Position {
+    fn default() -> Self {
+        Self::new_position()
+    }
+    // When we just print it out via the `Display` trait,
+    // we won't need to implement getters for `Position` in this program.
+    // We just remove them to make the compiler a little happier.
+}
+
+// Implement the `fmt::Display` trait for `Position`.
+
+// Let's also make it possible to do something like
+// `Position` + `Direction`. What trait would we implement
+// to enable this functionality?
 
 fn input(prompt: &str) -> String {
     print!("{prompt}");
@@ -91,35 +95,33 @@ fn input(prompt: &str) -> String {
     std::io::stdin().lines().next().unwrap().unwrap()
 }
 
-fn main() {
+pub fn main() {
 
     let mut money = 0;
+    
     let mut pos = Position::new_position();
 
-    println!("Start position: ({}, {})", pos.get_x(), pos.get_y());
+    // Relies on the `Display` trait being implemented for `Position`.
+    // println!("Start position: {}", pos);
 
     for _ in 0..6 {
         let direction_string = input("Input action: ").to_lowercase();
 
-        let maybe_action = Action::from_string(&direction_string as &str);
-
-        match maybe_action {
+        match Action::from_string(&direction_string) {
             Ok(action) => {
+                // We can put the printing functionality just in one line
+                // outside the `match` statement.
+                // Though of course, this relies on the `fmt::Display` trait
+                // being implemented for `Action`.
+                // println!("You {action}.");
+
                 match action {
-                    Action::Splash => {
-                        println!("Splash.");
-                    }
+                    Action::Splash => {}
                     Action::Movement(d) => {
-                        match d {
-                            Direction::Left => println!("Moved left."),
-                            Direction::Right => println!("Moved right."),
-                            Direction::Up => println!("Moved up."),
-                            Direction::Down => println!("Moved down."),
-                        }
-                        pos = pos.make_movement(&d);
+                        // This will need some trait to overload the operator.
+                        // pos = pos + d;
                     }
                     Action::Deposit(value) => {
-                        println!("Deposited {value}.");
                         money += value;
                     }
                 }
@@ -130,6 +132,8 @@ fn main() {
         }
     }
 
-    println!("End position: ({}, {})", pos.get_x(), pos.get_y());
+    // Implementing the `Display` trait also gives you
+    // access to the `to_string` method.
+    // println!("End position: {}", pos.to_string());
     println!("Final money: ${money}");
 }
